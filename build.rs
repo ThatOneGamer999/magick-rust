@@ -122,6 +122,7 @@ fn main() {
         // Work around the include! issue in rustc (as described in the
         // rust-bindgen README file) by wrapping the generated code in a
         // `pub mod` declaration; see issue #359 in (old) rust-bindgen.
+        file.write(b"#[allow(warnings)]\n").unwrap();
         file.write(b"pub mod bindings {\n").unwrap();
         file.write(bindings.to_string().as_bytes()).unwrap();
         file.write(b"\n}").unwrap();

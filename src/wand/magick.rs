@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#![allow(depricated)]
 use libc::c_void;
 use std::ffi::{CStr, CString};
 use std::{fmt, ptr, slice};
@@ -458,6 +459,23 @@ impl MagickWand {
             } else {
                 None
             }
+        }
+    }
+
+    /// Liquid rescales an image.
+    /// Will return an Err if ImageMagick was not compiled with LQR support
+    pub fn liquid_rescale_image(&self, x: usize, y: usize, delta: f64, rigidity: f64 ) -> Result<(), &'static str> {
+        match unsafe {
+            bindings::MagickLiquidRescaleImage(
+                self.wand,
+                x,
+                y,
+                delta,
+                rigidity
+            )
+        } {
+            (bindings::MagickBooleanType_MagickTrue) => Ok(()),
+            _ => Err("LiquidRescaleImage returned false")
         }
     }
 
